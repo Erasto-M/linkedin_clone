@@ -119,7 +119,6 @@ class _CreateAccountState extends State<CreateAccount> {
                   "images/google.png",
                 ),
                 const Spacer(),
-                ShowElevatedButton(color, () { }, text, borderSide, fontWeight, imagePath)
               ],
             ),
           ),

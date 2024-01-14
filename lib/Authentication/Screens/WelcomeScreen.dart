@@ -50,7 +50,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   const BorderSide(color: Colors.black),
                   FontWeight.normal
               ),
-
+              const Spacer(),
             ],
           ),
         ),
