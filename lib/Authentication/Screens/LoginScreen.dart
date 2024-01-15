@@ -1,8 +1,9 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:linkedin_clone/Authentication/Screens/CreateAccount.dart';
 
 import 'ReusableWidgets.dart';
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatefulWidget  {
   const LoginScreen({super.key});
 
   @override
@@ -10,6 +11,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  late CameraDescription camera;
   final FullNameController = TextEditingController();
   final EmailController = TextEditingController();
   final PassWordController = TextEditingController();
@@ -66,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CreateAccount()));
+                      // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CreateAccount(camera: camera,)));
                     },
                     child: SmallText("Sign Up", Colors.blue),
                   ),
