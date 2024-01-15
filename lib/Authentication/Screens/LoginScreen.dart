@@ -1,9 +1,11 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:linkedin_clone/Authentication/Screens/AuthBackend.dart';
 import 'package:linkedin_clone/Authentication/Screens/CreateAccount.dart';
 
 import 'ReusableWidgets.dart';
-class LoginScreen extends StatefulWidget  {
+
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
@@ -22,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
-          child:  Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ShowLinkedInImage(),
@@ -54,7 +56,12 @@ class _LoginScreenState extends State<LoginScreen> {
               showHeight(),
               ShowButton(
                 Colors.blue,
-                    () {},
+                () async {
+                  await Authentication().LoginUser(
+                      email: EmailController.text,
+                      passWord: PassWordController.text,
+                      context: context);
+                },
                 "Log in",
                 BorderSide.none,
                 FontWeight.bold,
@@ -68,7 +75,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CreateAccount()));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => CreateAccount()));
                     },
                     child: SmallText("Sign Up", Colors.blue),
                   ),
@@ -99,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
               showHeight(),
               ShowElevatedButton(
                 Colors.white,
-                    () {},
+                () {},
                 "Log In With Google",
                 const BorderSide(color: Colors.blue),
                 FontWeight.normal,
@@ -108,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
               showHeight(),
               ShowElevatedButton(
                 Colors.white,
-                    () {},
+                () {},
                 "Log in With Apple",
                 const BorderSide(color: Colors.blue),
                 FontWeight.normal,
@@ -117,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
               showHeight(),
               ShowElevatedButton(
                 Colors.white,
-                    () {},
+                () {},
                 "Log in With Facebook",
                 const BorderSide(color: Colors.blue),
                 FontWeight.normal,

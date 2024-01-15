@@ -1,13 +1,14 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:linkedin_clone/Authentication/Screens/AuthBackend.dart';
 import '../../HomePage/Home_nav.dart';
 import 'LoginScreen.dart';
 import 'ReusableWidgets.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CreateAccount extends StatefulWidget {
-  const CreateAccount({ super.key});
+  const CreateAccount({super.key});
   // final CameraDescription camera;
   @override
   State<CreateAccount> createState() => _CreateAccountState();
@@ -18,7 +19,7 @@ class _CreateAccountState extends State<CreateAccount> {
   final EmailController = TextEditingController();
   final PassWordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-   File? _image;
+  File? _image;
   Future getImage(bool isCamera) async {
     try {
       ImageSource source = isCamera ? ImageSource.camera : ImageSource.gallery;
@@ -32,7 +33,6 @@ class _CreateAccountState extends State<CreateAccount> {
       print("Error picking image: $e");
     }
   }
-
 
   // late String? imagePath; // Declared at the class level
   //
@@ -131,17 +131,33 @@ class _CreateAccountState extends State<CreateAccount> {
               Row(
                 children: [
                   IconButton(
-                      onPressed: (){
+                      onPressed: () {
                         getImage(true);
-                      }, icon: const Icon(Icons.camera_alt,size: 30,)),
-                  const SizedBox(width: 50,),
+                      },
+                      icon: const Icon(
+                        Icons.camera_alt,
+                        size: 30,
+                      )),
+                  const SizedBox(
+                    width: 50,
+                  ),
                   IconButton(
-                      onPressed: (){
+                      onPressed: () {
                         getImage(false);
-                      }, icon: const Icon(Icons.insert_drive_file,size: 30,)),
+                      },
+                      icon: const Icon(
+                        Icons.insert_drive_file,
+                        size: 30,
+                      )),
                 ],
               ),
-               _image == null ? Container() : Image.file(_image!,height: 200,width: 200,),
+              _image == null
+                  ? Container()
+                  : Image.file(
+                      _image!,
+                      height: 200,
+                      width: 200,
+                    ),
               // IconButton(
               //   onPressed: () async {
               //     try {
@@ -161,12 +177,11 @@ class _CreateAccountState extends State<CreateAccount> {
               showHeight(),
               ShowButton(
                 Colors.blue,
-                    () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => HomeNavigation(),
-                    ),
-                  );
+                () async {
+                  await Authentication().createUser(
+                      Email: EmailController.text,
+                      passWord: PassWordController.text,
+                      context: context);
                 },
                 "Sign Up",
                 BorderSide.none,
@@ -214,7 +229,7 @@ class _CreateAccountState extends State<CreateAccount> {
               showHeight(),
               ShowElevatedButton(
                 Colors.white,
-                    () {},
+                () {},
                 "Sign Up With Google",
                 const BorderSide(color: Colors.blue),
                 FontWeight.normal,
@@ -223,7 +238,7 @@ class _CreateAccountState extends State<CreateAccount> {
               showHeight(),
               ShowElevatedButton(
                 Colors.white,
-                    () {},
+                () {},
                 "Sign Up With Apple",
                 const BorderSide(color: Colors.blue),
                 FontWeight.normal,
@@ -232,7 +247,7 @@ class _CreateAccountState extends State<CreateAccount> {
               showHeight(),
               ShowElevatedButton(
                 Colors.white,
-                    () {},
+                () {},
                 "Sign Up With Facebook",
                 const BorderSide(color: Colors.blue),
                 FontWeight.normal,
