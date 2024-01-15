@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linkedin_clone/Authentication/Screens/LoginScreen.dart';
 
 import 'ReusableWidgets.dart';
 
@@ -85,7 +86,9 @@ class _CreateAccountState extends State<CreateAccount> {
                     width: 5,
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LoginScreen()));
+                    },
                     child: SmallText("Log In", Colors.blue),
                   ),
                 ],
@@ -117,7 +120,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 Colors.white,
                     () {},
                 "Sign Up With Google",
-                const BorderSide(color: Colors.black87),
+                const BorderSide(color: Colors.blue),
                 FontWeight.normal,
                 "images/google.png",
               ),
@@ -126,7 +129,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 Colors.white,
                     () {},
                 "Sign Up With Apple",
-                const BorderSide(color: Colors.black87),
+                const BorderSide(color: Colors.blue),
                 FontWeight.normal,
                 "images/apple.png",
               ),
@@ -135,7 +138,7 @@ class _CreateAccountState extends State<CreateAccount> {
                 Colors.white,
                     () {},
                 "Sign Up With Facebook",
-                const BorderSide(color: Colors.black87),
+                const BorderSide(color: Colors.blue),
                 FontWeight.normal,
                 "images/facebook.png",
               ),
