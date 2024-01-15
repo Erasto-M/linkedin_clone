@@ -127,33 +127,37 @@ ElevatedButton ShowElevatedButton(
       minimumSize: const Size(double.infinity, 50),
       backgroundColor: color,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(20),
         side: borderSide,
       ),
     ),
-    child: Center(
-      child: Row(
-        children: [
-          Container(
-            height: 40,
-            width: 40,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage(imagePath ?? ""),
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              children: [
+                Center(child: Image.asset(imagePath ?? "" , height: 45,width: 45,)),
+              ],
+            ),
+            const SizedBox(width:40,),
+            Center(
+              child: Text(
+                text,
+              style: const TextStyle(
+                color: Colors.black87,
+                fontSize: 20,
+              ),
               ),
             ),
-          ),
-          const SizedBox(width: 20,),
-          Text(text,
-          style: const TextStyle(
-            color: Colors.black87,
-            fontSize: 20,
-          ),
-          ),
-        ],
+          ],
+        ),
       ),
     ),
   );
 }
+ SizedBox showHeight(){
+   return const SizedBox(height: 10,);
+ }

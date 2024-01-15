@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:linkedin_clone/Authentication/Screens/LoginScreen.dart';
 import 'package:linkedin_clone/Authentication/Screens/ReusableWidgets.dart';
+
+import 'CreateAccount.dart';
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
@@ -37,7 +40,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               const Spacer(),
               ShowButton(Colors.blue,
-                      () { },
+                      () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>CreateAccount()));
+                      },
                   "Sign Up",
                 BorderSide.none,
                   FontWeight.normal,
@@ -45,9 +50,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ),
               const Spacer(),
               ShowButton(Colors.white,
-                      () { },
+                      () {
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>LoginScreen()));
+                      },
                   "Log In",
-                  const BorderSide(color: Colors.black),
+                  const BorderSide(color: Colors.blue),
                   FontWeight.normal
               ),
               const Spacer(),
