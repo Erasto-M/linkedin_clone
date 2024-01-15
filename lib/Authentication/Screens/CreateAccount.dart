@@ -141,7 +141,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       }, icon: const Icon(Icons.insert_drive_file,size: 30,)),
                 ],
               ),
-               _image == null ? Container() : CircleAvatar(radius: 50,child: Image.file(_image!,fit: BoxFit.fill,),),
+               _image == null ? Container() : Image.file(_image!,height: 200,width: 200,),
               // IconButton(
               //   onPressed: () async {
               //     try {
