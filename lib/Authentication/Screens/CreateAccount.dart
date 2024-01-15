@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:linkedin_clone/Authentication/Screens/AuthBackend.dart';
-import '../../HomePage/Home_nav.dart';
 import 'LoginScreen.dart';
 import 'ReusableWidgets.dart';
 import 'package:image_picker/image_picker.dart';

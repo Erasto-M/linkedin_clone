@@ -18,7 +18,7 @@ class Authentication {
         await user.sendEmailVerification();
         ShowSuccessMessage(
             context, "Account Successfully Created, check email to verify");
-        await Navigator.of(context).pushReplacement(
+        await Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => LoginScreen()));
       }
     } catch (e) {
