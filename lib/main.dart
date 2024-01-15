@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:linkedin_clone/Authentication/Screens/CreateAccount.dart';
 import 'package:linkedin_clone/Authentication/Screens/WelcomeScreen.dart';
 void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  final cameras = await availableCameras();
-  final firstCamera = cameras.first;
-  runApp( MaterialApp(
+  // WidgetsFlutterBinding.ensureInitialized();
+  // final cameras = await availableCameras();
+  // final firstCamera = cameras.first;
+  runApp( const MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: CreateAccount(camera: firstCamera),
+    home:Home(),
   ));
 }
 class Home extends StatefulWidget {
@@ -21,6 +21,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return WelcomeScreen();
   }
 }

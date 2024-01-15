@@ -11,7 +11,7 @@ class LoginScreen extends StatefulWidget  {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late CameraDescription camera;
+  // late CameraDescription camera;
   final FullNameController = TextEditingController();
   final EmailController = TextEditingController();
   final PassWordController = TextEditingController();
@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CreateAccount(camera: camera,)));
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CreateAccount()));
                     },
                     child: SmallText("Sign Up", Colors.blue),
                   ),

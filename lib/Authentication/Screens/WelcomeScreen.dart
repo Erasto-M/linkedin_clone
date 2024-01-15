@@ -43,7 +43,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               const Spacer(),
               ShowButton(Colors.blue,
                       () {
-                        // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>CreateAccount(camera: camera)));
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>CreateAccount()));
                       },
                   "Sign Up",
                 BorderSide.none,
