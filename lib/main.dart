@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:linkedin_clone/Authentication/Screens/CreateAccount.dart';
 import 'package:linkedin_clone/Authentication/Screens/WelcomeScreen.dart';
+import 'package:linkedin_clone/HomePage/Home_nav.dart';
+import 'Authentication/Screens/LoginScreen.dart';
 void main(){
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
@@ -17,6 +18,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return const  CreateAccount();
+    return const HomeNavigation();
   }
 }
