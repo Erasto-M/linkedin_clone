@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:linkedin_clone/Authentication/Screens/LoginScreen.dart';
 import 'package:linkedin_clone/Authentication/Screens/ReusableWidgets.dart';
@@ -11,6 +12,7 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
+  late CameraDescription camera;
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -41,7 +43,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               const Spacer(),
               ShowButton(Colors.blue,
                       () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>CreateAccount()));
+                        // Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>CreateAccount(camera: camera)));
                       },
                   "Sign Up",
                 BorderSide.none,

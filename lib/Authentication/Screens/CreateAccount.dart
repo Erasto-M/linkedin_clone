@@ -1,13 +1,13 @@
+import 'dart:io';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:linkedin_clone/Authentication/Screens/LoginScreen.dart';
-import 'package:linkedin_clone/HomePage/Home_nav.dart';
-import 'package:linkedin_clone/main.dart';
-
+import '../../HomePage/Home_nav.dart';
+import 'LoginScreen.dart';
 import 'ReusableWidgets.dart';
 
 class CreateAccount extends StatefulWidget {
-  const CreateAccount({super.key});
-
+  const CreateAccount({required this.camera, super.key});
+  final CameraDescription camera;
   @override
   State<CreateAccount> createState() => _CreateAccountState();
 }
@@ -18,15 +18,54 @@ class _CreateAccountState extends State<CreateAccount> {
   final PassWordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
+  late String? imagePath; // Declared at the class level
+
+  // declaring the camera controller
+  late CameraController _cameraController;
+  late Future<void> initializeCameraControllerFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _cameraController = CameraController(
+      widget.camera,
+      ResolutionPreset.medium,
+    );
+    initializeCameraControllerFuture = _cameraController.initialize();
+  }
+
+  @override
+  void dispose() {
+    _cameraController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(15.0),
-           child:  Column(
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              FutureBuilder(
+                future: initializeCameraControllerFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return AspectRatio(
+                      aspectRatio: _cameraController.value.aspectRatio,
+                      child: CameraPreview(_cameraController),
+                    );
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.blue,
+                      ),
+                    );
+                  }
+                },
+              ),
               ShowLinkedInImage(),
               BigText("LINKEDIN", FontWeight.bold, Colors.blue),
               showHeight(),
@@ -72,12 +111,33 @@ class _CreateAccountState extends State<CreateAccount> {
                 "Confirm password",
               ),
               showHeight(),
+              const Text("Click to Upload Your Photo"),
+              IconButton(
+                onPressed: () async {
+                  try {
+                    await initializeCameraControllerFuture;
+                    final image = await _cameraController.takePicture();
+                    if (!mounted) {
+                      return;
+                    }
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>DisplayPictureScreen(imagePath: image.path)));
+                  } catch (e) {
+                    print(e);
+                  }
+                },
+                icon: const Icon(Icons.camera, size: 40),
+              ),
+              showHeight(),
               showHeight(),
               ShowButton(
                 Colors.blue,
                     () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>HomeNavigation()));
-                    },
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => HomeNavigation(),
+                    ),
+                  );
+                },
                 "Sign Up",
                 BorderSide.none,
                 FontWeight.bold,
@@ -86,12 +146,14 @@ class _CreateAccountState extends State<CreateAccount> {
               Row(
                 children: [
                   SmallText("Already Have An Account?", Colors.black87),
-                  const SizedBox(
-                    width: 5,
-                  ),
+                  const SizedBox(width: 5),
                   TextButton(
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>LoginScreen()));
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(),
+                        ),
+                      );
                     },
                     child: SmallText("Log In", Colors.blue),
                   ),
@@ -148,8 +210,30 @@ class _CreateAccountState extends State<CreateAccount> {
               ),
             ],
           ),
-          ),
         ),
+      ),
+    );
+  }
+}
+class DisplayPictureScreen extends StatelessWidget {
+  final String imagePath;
+
+  const DisplayPictureScreen({super.key, required this.imagePath});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Display the Picture')),
+      // The image is stored as a file on the device. Use the `Image.file`
+      // constructor with the given path to display the image.
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Image.file(File(imagePath)),
+          ],
+        ),
+      )
     );
   }
 }
