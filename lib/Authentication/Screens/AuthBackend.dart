@@ -1,10 +1,14 @@
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:linkedin_clone/Authentication/Screens/LoginScreen.dart';
-
 import '../../HomePage/Home_nav.dart';
 
+
 class Authentication {
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   Future<void> createUser({
     required String email,
     required String passWord,
@@ -18,8 +22,8 @@ class Authentication {
         await user.sendEmailVerification();
         ShowSuccessMessage(
             context, "Account Successfully Created, check email to verify");
-        await Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => LoginScreen()));
+        await Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => LoginScreen()));
       }
     } catch (e) {
       String errormessage = "$e";
@@ -32,25 +36,29 @@ class Authentication {
     required String passWord,
     required BuildContext context,
   }) async {
-    try{
-      UserCredential userCredential = (await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: passWord));
+    try {
+      UserCredential userCredential = (await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: passWord));
       User? user = userCredential.user;
-      if(user!=null){
-          ShowSuccessMessage(context, "Login Succesfully");
-          await Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>HomeNavigation()));
+      if (user != null) {
+        ShowSuccessMessage(context, "Login Succesfully");
+        await Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => HomeNavigation()));
       }
-    }catch(e){
+    } catch (e) {
       String errormessage = "$e";
       showOnFailuremessage(context, 'Error signing in : $errormessage');
     }
   }
-  Future<void> SignOutUser(BuildContext context)async{
-    try{
+
+  Future<void> SignOutUser(BuildContext context) async {
+    try {
       await FirebaseAuth.instance.signOut();
-    }catch(e){
+    } catch (e) {
       showOnFailuremessage(context, 'Error signing out: $e');
     }
   }
+
   void ShowSuccessMessage(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -75,4 +83,47 @@ class Authentication {
       backgroundColor: Colors.black87,
     ));
   }
+
+  GoogleSignIn(BuildContext context) async {
+    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    User? user;
+    if (kIsWeb) {
+      GoogleAuthProvider authProvider = GoogleAuthProvider();
+
+      try {
+        final UserCredential userCredential =
+        await firebaseAuth.signInWithPopup(authProvider);
+
+        user = userCredential.user;
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      try {
+        final GoogleSignInAccount? googleSignInAccount = await GoogleSignIn(context)
+            .signIn();
+
+        if (googleSignInAccount != null) {
+          final GoogleSignInAuthentication googleSignInAuthentication =
+          await googleSignInAccount.authentication;
+
+          final AuthCredential credential = GoogleAuthProvider.credential(
+            accessToken: googleSignInAuthentication.accessToken,
+            idToken: googleSignInAuthentication.idToken,
+          );
+
+          final UserCredential userCredential =
+          await firebaseAuth.signInWithCredential(credential);
+          user = userCredential.user;
+        }
+      } catch (e) {
+        // Print or log the error message for debugging purposes
+        print("Google Sign-In Error: $e");
+        return "Google Sign-In Error: $e";
+      }
+
+      return user;
+    }
+  }
+
 }

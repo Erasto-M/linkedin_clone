@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:linkedin_clone/Authentication/Screens/AuthBackend.dart';
+import '../../HomePage/Home_nav.dart';
 import 'LoginScreen.dart';
 import 'ReusableWidgets.dart';
 import 'package:image_picker/image_picker.dart';
@@ -183,7 +185,12 @@ class _CreateAccountState extends State<CreateAccount> {
               showHeight(),
               ShowElevatedButton(
                 Colors.white,
-                () {},
+                    () async{
+                  User? user =   await Authentication().GoogleSignIn(context);
+                  if(user!=null){
+                    await Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>HomeNavigation()));
+                  }
+                },
                 "Sign Up With Google",
                 const BorderSide(color: Colors.blue),
                 FontWeight.normal,
