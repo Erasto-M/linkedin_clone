@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:linkedin_clone/Authentication/Screens/AuthBackend.dart';
 import 'LoginScreen.dart';
@@ -8,7 +7,6 @@ import 'package:image_picker/image_picker.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
-  // final CameraDescription camera;
   @override
   State<CreateAccount> createState() => _CreateAccountState();
 }
@@ -33,28 +31,6 @@ class _CreateAccountState extends State<CreateAccount> {
     }
   }
 
-  // late String? imagePath; // Declared at the class level
-  //
-  // // declaring the camera controller
-  // // late CameraController _cameraController;
-  // // late Future<void> initializeCameraControllerFuture;
-  //
-  // // @override
-  // // void initState() {
-  // //   super.initState();
-  // //   _cameraController = CameraController(
-  // //     widget.camera,
-  // //     ResolutionPreset.medium,
-  // //   );
-  // //   initializeCameraControllerFuture = _cameraController.initialize();
-  // // }
-  //
-  // // @override
-  // // void dispose() {
-  // //   _cameraController.dispose();
-  // //   super.dispose();
-  // // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,23 +40,6 @@ class _CreateAccountState extends State<CreateAccount> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // FutureBuilder(
-              //   future: initializeCameraControllerFuture,
-              //   builder: (context, snapshot) {
-              //     if (snapshot.connectionState == ConnectionState.done) {
-              //       return AspectRatio(
-              //         aspectRatio: _cameraController.value.aspectRatio,
-              //         child: CameraPreview(_cameraController),
-              //       );
-              //     } else {
-              //       return const Center(
-              //         child: CircularProgressIndicator(
-              //           color: Colors.blue,
-              //         ),
-              //       );
-              //     }
-              //   },
-              // ),
               ShowLinkedInImage(),
               BigText("LINKEDIN", FontWeight.bold, Colors.blue),
               showHeight(),
@@ -157,30 +116,26 @@ class _CreateAccountState extends State<CreateAccount> {
                       height: 200,
                       width: 200,
                     ),
-              // IconButton(
-              //   onPressed: () async {
-              //     try {
-              //       await initializeCameraControllerFuture;
-              //       final image = await _cameraController.takePicture();
-              //       if (!mounted) {
-              //         return;
-              //       }
-              //       Navigator.of(context).push(MaterialPageRoute(builder: (context)=>DisplayPictureScreen(imagePath: image.path)));
-              //     } catch (e) {
-              //       print(e);
-              //     }
-              //   },
-              //   icon: const Icon(Icons.camera, size: 40),
-              // ),
               showHeight(),
               showHeight(),
               ShowButton(
                 Colors.blue,
                 () async {
-                  await Authentication().createUser(
-                      Email: EmailController.text,
-                      passWord: PassWordController.text,
-                      context: context);
+                  String? validationError = ValidateFields(
+                    fullName: FullNameController.text,
+                    email: EmailController.text,
+                    password: PassWordController.text,
+                    confirmPassword: confirmPasswordController.text,
+                    ImageUrl: _image?.path,
+                  );
+                  if (validationError != null) {
+                    ShowerrorMessage(validationError);
+                  } else {
+                    await Authentication().createUser(
+                        email: EmailController.text,
+                        passWord: PassWordController.text,
+                        context: context);
+                  }
                 },
                 "Sign Up",
                 BorderSide.none,
@@ -258,26 +213,44 @@ class _CreateAccountState extends State<CreateAccount> {
       ),
     );
   }
+
+  void ShowerrorMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+      message,
+      style: TextStyle(color: Colors.red),
+    )));
+  }
+
+  String? ValidateFields({
+    required String fullName,
+    required String email,
+    required String password,
+    required String confirmPassword,
+    required String? ImageUrl,
+  }) {
+    if (fullName.isEmpty) {
+      return "Please enter your fullName";
+    }
+    if (email.isEmpty) {
+      return "please enter your email";
+    } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email)) {
+      return "please enter a valid email";
+    }
+    if (password.isEmpty) {
+      return "please enter your password";
+    } else if (password.length < 6) {
+      return "passwords should be atleast 6 characters";
+    }
+    if (confirmPassword.isEmpty) {
+      return "please enter your password";
+    } else if (confirmPassword != password) {
+      return "passwords do not match";
+    }
+    if (ImageUrl == null || ImageUrl!.isEmpty) {
+      return "please provide an Image";
+    }
+    return null;
+  }
 }
-// class DisplayPictureScreen extends StatelessWidget {
-//   final String imagePath;
-//
-//   const DisplayPictureScreen({super.key, required this.imagePath});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Display the Picture')),
-//       // The image is stored as a file on the device. Use the `Image.file`
-//       // constructor with the given path to display the image.
-//       body: Center(
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             Image.file(File(imagePath)),
-//           ],
-//         ),
-//       )
-//     );
-//   }
-// }

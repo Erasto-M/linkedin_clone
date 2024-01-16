@@ -161,3 +161,31 @@ ElevatedButton ShowElevatedButton(
  SizedBox showHeight(){
    return const SizedBox(height: 10,);
  }
+String? validateFullName(value){
+  if (value.isEmpty) {
+    return "Please enter your fullName";
+  }
+  return null;
+}
+String? validateEmail(value){
+  if (value.isEmpty) {
+    return "please enter your email";
+  } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+      .hasMatch(value)) {
+    return "please enter a valid email";
+  }
+}
+String? validatePassword(value){
+  if (value.isEmpty) {
+    return "please enter your password";
+  } else if (value.length < 6) {
+    return "passwords should be atleast 6 characters";
+  }
+}
+String? validateConfirmPassword(value, String password){
+  if (value.isEmpty) {
+    return "please enter your password";
+  } else if (value != password) {
+    return "passwords do not match";
+  }
+}

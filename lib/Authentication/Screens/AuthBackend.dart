@@ -6,13 +6,13 @@ import '../../HomePage/Home_nav.dart';
 
 class Authentication {
   Future<void> createUser({
-    required String Email,
+    required String email,
     required String passWord,
     required BuildContext context,
   }) async {
     try {
       UserCredential userCredential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: Email, password: passWord);
+          .createUserWithEmailAndPassword(email: email, password: passWord);
       User? user = userCredential.user;
       if (user != null) {
         await user.sendEmailVerification();
@@ -33,15 +33,11 @@ class Authentication {
     required BuildContext context,
   }) async {
     try{
-      User? user = (await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: passWord)) as User;
+      UserCredential userCredential = (await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: passWord));
+      User? user = userCredential.user;
       if(user!=null){
-        if(user.emailVerified){
           ShowSuccessMessage(context, "Login Succesfully");
           await Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>HomeNavigation()));
-        } else{
-          showOnFailuremessage(context, 'Please verify your email');
-          await FirebaseAuth.instance.signOut();
-        }
       }
     }catch(e){
       String errormessage = "$e";
@@ -76,7 +72,7 @@ class Authentication {
         message,
         style: const TextStyle(color: Colors.red, fontSize: 18),
       ),
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.black87,
     ));
   }
 }
