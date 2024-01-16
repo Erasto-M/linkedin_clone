@@ -34,7 +34,7 @@ LinkedIn Clone is a Flutter app that replicates the key features of the LinkedIn
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/y/linkedin_clone.git
+   git clone https://github.com/https://github.com/Erasto-M/linkedin_clone.git
 
 
 ## Getting Started
