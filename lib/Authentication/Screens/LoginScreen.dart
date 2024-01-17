@@ -63,6 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       email: EmailController.text,
                       passWord: PassWordController.text,
                       context: context);
+                  await SendDataToFirebase().FetchCurrentUserprofile();
                 },
                 "Log in",
                 BorderSide.none,
