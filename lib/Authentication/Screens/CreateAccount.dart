@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:linkedin_clone/Authentication/Screens/AuthBackend.dart';
+import 'package:linkedin_clone/HomePage/SendDatatoFirebase.dart';
 import '../../HomePage/Home_nav.dart';
 import 'LoginScreen.dart';
 import 'ReusableWidgets.dart';
@@ -128,7 +129,6 @@ class _CreateAccountState extends State<CreateAccount> {
                     email: EmailController.text,
                     password: PassWordController.text,
                     confirmPassword: confirmPasswordController.text,
-                    ImageUrl: _image?.path,
                   );
                   if (validationError != null) {
                     ShowerrorMessage(validationError);
@@ -136,6 +136,10 @@ class _CreateAccountState extends State<CreateAccount> {
                     await Authentication().createUser(
                         email: EmailController.text,
                         passWord: PassWordController.text,
+                        context: context);
+                    await SendDataToFirebase().sendProfileDataToFirebase(
+                        fullName: FullNameController.text,
+                        email: EmailController.text,
                         context: context);
                   }
                 },
@@ -185,10 +189,12 @@ class _CreateAccountState extends State<CreateAccount> {
               showHeight(),
               ShowElevatedButton(
                 Colors.white,
-                    () async{
-                  User? user =   await Authentication().GoogleSignIn(context);
-                  if(user!=null){
-                    await Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>HomeNavigation()));
+                () async {
+                  User? user = await Authentication().GoogleSignIn(context);
+                  if (user != null) {
+                    await Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (context) => HomeNavigation()));
                   }
                 },
                 "Sign Up With Google",
@@ -234,7 +240,7 @@ class _CreateAccountState extends State<CreateAccount> {
     required String email,
     required String password,
     required String confirmPassword,
-    required String? ImageUrl,
+    // required String? ImageUrl,
   }) {
     if (fullName.isEmpty) {
       return "Please enter your fullName";
@@ -255,9 +261,9 @@ class _CreateAccountState extends State<CreateAccount> {
     } else if (confirmPassword != password) {
       return "passwords do not match";
     }
-    if (ImageUrl == null || ImageUrl!.isEmpty) {
-      return "please provide an Image";
-    }
+    // if (ImageUrl == null || ImageUrl!.isEmpty) {
+    //   return "please provide an Image";
+    // }
     return null;
   }
 }
