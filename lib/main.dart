@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:linkedin_clone/Authentication/Screens/CreateAccount.dart';
 import 'package:linkedin_clone/Authentication/Screens/WelcomeScreen.dart';
+import 'package:linkedin_clone/HomePage/Home_nav.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 void main() async{

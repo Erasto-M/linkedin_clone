@@ -1,11 +1,10 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:linkedin_clone/Authentication/Screens/LoginScreen.dart';
+import 'package:linkedin_clone/Authentication/Screens/WelcomeScreen.dart';
 import '../../HomePage/Home_nav.dart';
-
 
 class Authentication {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -55,6 +54,8 @@ class Authentication {
   Future<void> SignOutUser(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
+      await Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => WelcomeScreen()));
     } catch (e) {
       showOnFailuremessage(context, 'Error signing out: $e');
     }
@@ -93,7 +94,7 @@ class Authentication {
 
       try {
         final UserCredential userCredential =
-        await firebaseAuth.signInWithPopup(authProvider);
+            await firebaseAuth.signInWithPopup(authProvider);
 
         user = userCredential.user;
       } catch (e) {
@@ -101,12 +102,12 @@ class Authentication {
       }
     } else {
       try {
-        final GoogleSignInAccount? googleSignInAccount = await GoogleSignIn(context)
-            .signIn();
+        final GoogleSignInAccount? googleSignInAccount =
+            await GoogleSignIn(context).signIn();
 
         if (googleSignInAccount != null) {
           final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
+              await googleSignInAccount.authentication;
 
           final AuthCredential credential = GoogleAuthProvider.credential(
             accessToken: googleSignInAuthentication.accessToken,
@@ -114,7 +115,7 @@ class Authentication {
           );
 
           final UserCredential userCredential =
-          await firebaseAuth.signInWithCredential(credential);
+              await firebaseAuth.signInWithCredential(credential);
           user = userCredential.user;
         }
       } catch (e) {
@@ -126,5 +127,4 @@ class Authentication {
       return user;
     }
   }
-
 }
