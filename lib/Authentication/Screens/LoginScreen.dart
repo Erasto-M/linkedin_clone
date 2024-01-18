@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:linkedin_clone/Authentication/Screens/AuthBackend.dart';
 import 'package:linkedin_clone/Authentication/Screens/CreateAccount.dart';
 import 'package:linkedin_clone/HomePage/Home_nav.dart';
+import 'package:linkedin_clone/HomePage/SendDatatoFirebase.dart';
 
 import 'ReusableWidgets.dart';
 
@@ -59,11 +60,11 @@ class _LoginScreenState extends State<LoginScreen> {
               ShowButton(
                 Colors.blue,
                 () async {
+                  print("before Login User");
                   await Authentication().LoginUser(
                       email: EmailController.text,
                       passWord: PassWordController.text,
                       context: context);
-                  await SendDataToFirebase().FetchCurrentUserprofile();
                 },
                 "Log in",
                 BorderSide.none,

@@ -133,15 +133,17 @@ class _CreateAccountState extends State<CreateAccount> {
                   if (validationError != null) {
                     ShowerrorMessage(validationError);
                   } else {
+                    await Authentication().createUser(
+                        email: EmailController.text,
+                        passWord: PassWordController.text,
+                        displayName: FullNameController.text,
+                        context: context);
                     await SendDataToFirebase().sendProfileDataToFirebase(
                         fullName: FullNameController.text,
                         email: EmailController.text,
                         context: context);
-                    await Authentication().createUser(
-                        email: EmailController.text,
-                        passWord: PassWordController.text,
-                        context: context);
-                    await SendDataToFirebase().FetchCurrentUserprofile();
+                    await Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) => LoginScreen()));
                   }
                 },
                 "Sign Up",

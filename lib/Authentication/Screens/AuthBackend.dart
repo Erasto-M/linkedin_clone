@@ -9,9 +9,10 @@ import '../../HomePage/Home_nav.dart';
 
 class Authentication {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  Future<void> createUser({
+  Future<User?> createUser({
     required String email,
     required String passWord,
+    required String displayName,
     required BuildContext context,
   }) async {
     try {
@@ -19,11 +20,11 @@ class Authentication {
           .createUserWithEmailAndPassword(email: email, password: passWord);
       User? user = userCredential.user;
       if (user != null) {
+        await user.updateDisplayName(displayName);
         await user.sendEmailVerification();
         ShowSuccessMessage(
             context, "Account Successfully Created, check email to verify");
-        await Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => LoginScreen()));
+        return user;
       }
     } catch (e) {
       String errormessage = "$e";

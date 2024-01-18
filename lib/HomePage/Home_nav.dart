@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:linkedin_clone/HomePage/SendDatatoFirebase.dart';
 
 class HomeNavigation extends StatefulWidget {
   const HomeNavigation({super.key});
@@ -9,16 +11,44 @@ class HomeNavigation extends StatefulWidget {
 
 class _HomeNavigationState extends State<HomeNavigation> {
   int _CurrentState = 0;
+  String ? fullName;
+   String ? email;
+  @override
+  void initState(){
+    super.initState();
+    fetchUserProfile();
+  }
+  Future<void> fetchUserProfile()async{
+    User? user =await  SendDataToFirebase().fetchCurrentUserProfile();
+    if(user!=null) {
+      setState(() {
+        fullName = user?.displayName;
+        email = user?.email;
+      });
+      print("Full Name: $fullName, Email: $email");
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: [
         //Homepage
-        const Card(
+         Card(
             margin: EdgeInsets.all(20),
             child: SizedBox.expand(
               child: Center(
-                child: Text("Welcome To HomePage"),
+                child: Column(
+                  children: [
+                    Text(
+                      "Full Name: ${fullName ?? 'N/A'}",
+                      style:const  TextStyle(fontSize: 18),
+                    ),
+                    Text(
+                      "Email : ${email ?? 'N/A'}",
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  ],
+                ),
               ),
             )),
         const Card(
