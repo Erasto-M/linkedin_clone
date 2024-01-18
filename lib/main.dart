@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:linkedin_clone/Authentication/Screens/CreateAccount.dart';
+import 'package:linkedin_clone/Authentication/Screens/SplashScreen.dart';
 import 'package:linkedin_clone/Authentication/Screens/WelcomeScreen.dart';
 import 'package:linkedin_clone/HomePage/Home_nav.dart';
 import 'firebase_options.dart';
@@ -25,6 +26,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return WelcomeScreen();
+    return SplashScreen();
   }
 }

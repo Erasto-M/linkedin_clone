@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:linkedin_clone/Authentication/Screens/AuthBackend.dart';
+import 'package:linkedin_clone/Authentication/Backend/AuthBackend.dart';
 import 'package:linkedin_clone/HomePage/SendDatatoFirebase.dart';
 
 class HomeNavigation extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:linkedin_clone/Authentication/Screens/AuthBackend.dart';
+import 'package:linkedin_clone/Authentication/Backend/AuthBackend.dart';
 import 'package:linkedin_clone/Authentication/Screens/CreateAccount.dart';
 import 'package:linkedin_clone/HomePage/Home_nav.dart';
 import 'package:linkedin_clone/HomePage/SendDatatoFirebase.dart';

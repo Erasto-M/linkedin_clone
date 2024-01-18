@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:linkedin_clone/Authentication/Screens/AuthBackend.dart';
+import 'package:linkedin_clone/Authentication/Backend/AuthBackend.dart';
 
 class SendDataToFirebase {
   Future<User?> sendProfileDataToFirebase({
