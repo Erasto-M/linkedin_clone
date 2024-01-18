@@ -1,13 +1,15 @@
 import 'dart:io';
-import 'package:camera/camera.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:linkedin_clone/Authentication/Backend/AuthBackend.dart';
+import 'package:linkedin_clone/HomePage/SendDatatoFirebase.dart';
 import '../../HomePage/Home_nav.dart';
 import 'LoginScreen.dart';
 import 'ReusableWidgets.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CreateAccount extends StatefulWidget {
-  const CreateAccount({required this.camera, super.key});
-  final CameraDescription camera;
+  const CreateAccount({super.key});
   @override
   State<CreateAccount> createState() => _CreateAccountState();
 }
@@ -17,27 +19,19 @@ class _CreateAccountState extends State<CreateAccount> {
   final EmailController = TextEditingController();
   final PassWordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  File? _image;
+  Future getImage(bool isCamera) async {
+    try {
+      ImageSource source = isCamera ? ImageSource.camera : ImageSource.gallery;
+      final pickedFile = await ImagePicker().pickImage(source: source);
 
-  late String? imagePath; // Declared at the class level
-
-  // declaring the camera controller
-  late CameraController _cameraController;
-  late Future<void> initializeCameraControllerFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _cameraController = CameraController(
-      widget.camera,
-      ResolutionPreset.medium,
-    );
-    initializeCameraControllerFuture = _cameraController.initialize();
-  }
-
-  @override
-  void dispose() {
-    _cameraController.dispose();
-    super.dispose();
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        setState(() {});
+      }
+    } catch (e) {
+      print("Error picking image: $e");
+    }
   }
 
   @override
@@ -49,23 +43,6 @@ class _CreateAccountState extends State<CreateAccount> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              FutureBuilder(
-                future: initializeCameraControllerFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return AspectRatio(
-                      aspectRatio: _cameraController.value.aspectRatio,
-                      child: CameraPreview(_cameraController),
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.blue,
-                      ),
-                    );
-                  }
-                },
-              ),
               ShowLinkedInImage(),
               BigText("LINKEDIN", FontWeight.bold, Colors.blue),
               showHeight(),
@@ -112,31 +89,62 @@ class _CreateAccountState extends State<CreateAccount> {
               ),
               showHeight(),
               const Text("Click to Upload Your Photo"),
-              IconButton(
-                onPressed: () async {
-                  try {
-                    await initializeCameraControllerFuture;
-                    final image = await _cameraController.takePicture();
-                    if (!mounted) {
-                      return;
-                    }
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=>DisplayPictureScreen(imagePath: image.path)));
-                  } catch (e) {
-                    print(e);
-                  }
-                },
-                icon: const Icon(Icons.camera, size: 40),
+              Row(
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        getImage(true);
+                      },
+                      icon: const Icon(
+                        Icons.camera_alt,
+                        size: 30,
+                      )),
+                  const SizedBox(
+                    width: 50,
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        getImage(false);
+                      },
+                      icon: const Icon(
+                        Icons.insert_drive_file,
+                        size: 30,
+                      )),
+                ],
               ),
+              _image == null
+                  ? Container()
+                  : Image.file(
+                      _image!,
+                      height: 200,
+                      width: 200,
+                    ),
               showHeight(),
               showHeight(),
               ShowButton(
                 Colors.blue,
-                    () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => HomeNavigation(),
-                    ),
+                () async {
+                  String? validationError = ValidateFields(
+                    fullName: FullNameController.text,
+                    email: EmailController.text,
+                    password: PassWordController.text,
+                    confirmPassword: confirmPasswordController.text,
                   );
+                  if (validationError != null) {
+                    ShowerrorMessage(validationError);
+                  } else {
+                    await Authentication().createUser(
+                        email: EmailController.text,
+                        passWord: PassWordController.text,
+                        displayName: FullNameController.text,
+                        context: context);
+                    await SendDataToFirebase().sendProfileDataToFirebase(
+                        fullName: FullNameController.text,
+                        email: EmailController.text,
+                        context: context);
+                    await Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) => LoginScreen()));
+                  }
                 },
                 "Sign Up",
                 BorderSide.none,
@@ -184,7 +192,14 @@ class _CreateAccountState extends State<CreateAccount> {
               showHeight(),
               ShowElevatedButton(
                 Colors.white,
-                    () {},
+                () async {
+                  User? user = await Authentication().GoogleSignIn(context);
+                  if (user != null) {
+                    await Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                            builder: (context) => HomeNavigation()));
+                  }
+                },
                 "Sign Up With Google",
                 const BorderSide(color: Colors.blue),
                 FontWeight.normal,
@@ -193,7 +208,7 @@ class _CreateAccountState extends State<CreateAccount> {
               showHeight(),
               ShowElevatedButton(
                 Colors.white,
-                    () {},
+                () {},
                 "Sign Up With Apple",
                 const BorderSide(color: Colors.blue),
                 FontWeight.normal,
@@ -202,7 +217,7 @@ class _CreateAccountState extends State<CreateAccount> {
               showHeight(),
               ShowElevatedButton(
                 Colors.white,
-                    () {},
+                () {},
                 "Sign Up With Facebook",
                 const BorderSide(color: Colors.blue),
                 FontWeight.normal,
@@ -214,26 +229,44 @@ class _CreateAccountState extends State<CreateAccount> {
       ),
     );
   }
-}
-class DisplayPictureScreen extends StatelessWidget {
-  final String imagePath;
 
-  const DisplayPictureScreen({super.key, required this.imagePath});
+  void ShowerrorMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+      message,
+      style: TextStyle(color: Colors.red),
+    )));
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Display the Picture')),
-      // The image is stored as a file on the device. Use the `Image.file`
-      // constructor with the given path to display the image.
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.file(File(imagePath)),
-          ],
-        ),
-      )
-    );
+  String? ValidateFields({
+    required String fullName,
+    required String email,
+    required String password,
+    required String confirmPassword,
+    // required String? ImageUrl,
+  }) {
+    if (fullName.isEmpty) {
+      return "Please enter your fullName";
+    }
+    if (email.isEmpty) {
+      return "please enter your email";
+    } else if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email)) {
+      return "please enter a valid email";
+    }
+    if (password.isEmpty) {
+      return "please enter your password";
+    } else if (password.length < 6) {
+      return "passwords should be atleast 6 characters";
+    }
+    if (confirmPassword.isEmpty) {
+      return "please enter your password";
+    } else if (confirmPassword != password) {
+      return "passwords do not match";
+    }
+    // if (ImageUrl == null || ImageUrl!.isEmpty) {
+    //   return "please provide an Image";
+    // }
+    return null;
   }
 }

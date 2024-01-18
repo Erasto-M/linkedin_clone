@@ -1,9 +1,14 @@
 import 'package:camera/camera.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:linkedin_clone/Authentication/Backend/AuthBackend.dart';
 import 'package:linkedin_clone/Authentication/Screens/CreateAccount.dart';
+import 'package:linkedin_clone/HomePage/Home_nav.dart';
+import 'package:linkedin_clone/HomePage/SendDatatoFirebase.dart';
 
 import 'ReusableWidgets.dart';
-class LoginScreen extends StatefulWidget  {
+
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
@@ -11,7 +16,7 @@ class LoginScreen extends StatefulWidget  {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late CameraDescription camera;
+  // late CameraDescription camera;
   final FullNameController = TextEditingController();
   final EmailController = TextEditingController();
   final PassWordController = TextEditingController();
@@ -22,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
-          child:  Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               ShowLinkedInImage(),
@@ -54,7 +59,13 @@ class _LoginScreenState extends State<LoginScreen> {
               showHeight(),
               ShowButton(
                 Colors.blue,
-                    () {},
+                () async {
+                  print("before Login User");
+                  await Authentication().LoginUser(
+                      email: EmailController.text,
+                      passWord: PassWordController.text,
+                      context: context);
+                },
                 "Log in",
                 BorderSide.none,
                 FontWeight.bold,
@@ -68,7 +79,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>CreateAccount(camera: camera,)));
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => CreateAccount()));
                     },
                     child: SmallText("Sign Up", Colors.blue),
                   ),
@@ -99,7 +111,12 @@ class _LoginScreenState extends State<LoginScreen> {
               showHeight(),
               ShowElevatedButton(
                 Colors.white,
-                    () {},
+                    () async{
+                User? user =   await Authentication().GoogleSignIn(context);
+                if(user!=null){
+                  await Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>HomeNavigation()));
+                }
+                },
                 "Log In With Google",
                 const BorderSide(color: Colors.blue),
                 FontWeight.normal,
@@ -108,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
               showHeight(),
               ShowElevatedButton(
                 Colors.white,
-                    () {},
+                () {},
                 "Log in With Apple",
                 const BorderSide(color: Colors.blue),
                 FontWeight.normal,
@@ -117,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
               showHeight(),
               ShowElevatedButton(
                 Colors.white,
-                    () {},
+                () {},
                 "Log in With Facebook",
                 const BorderSide(color: Colors.blue),
                 FontWeight.normal,
