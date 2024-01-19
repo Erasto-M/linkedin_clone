@@ -11,9 +11,12 @@ void main() async{
    await Firebase.initializeApp(
      options: DefaultFirebaseOptions.currentPlatform,
    );
-  runApp( const MaterialApp(
+  runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home:Home(),
+    home:const Home(),
+    theme: ThemeData(
+      primaryColor:const  Color.fromRGBO(225, 220, 220, 10),
+    ),
   ));
 }
 class Home extends StatefulWidget {

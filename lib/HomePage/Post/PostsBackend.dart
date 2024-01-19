@@ -8,6 +8,7 @@ class PostDataToFirebase {
   Future<User?> SendPostToFirebase({
     required String postTitle,
     required String postBody,
+    required String docID,
     required BuildContext context,
   }) async {
     try {
@@ -16,7 +17,7 @@ class PostDataToFirebase {
         String uid = currentUser.uid;
         CollectionReference collectionReference =
             firebaseFirestore.collection("Posts");
-        collectionReference.doc().set({
+        collectionReference.doc(docID).set({
           "PostTitle": postTitle,
           "PostBody": postBody,
           "UID": uid,
@@ -50,6 +51,28 @@ class PostDataToFirebase {
     } catch (e) {
       print("Error fetching user posts: $e");
       return [];
+    }
+  }
+  Future<void> deletePost({
+    required BuildContext context,required String? docId})async{
+    try{
+      User? user = await FirebaseAuth.instance.currentUser;
+      if(user!=null){
+        String uid = user.uid;
+        DocumentReference documentReference= await firebaseFirestore.collection("Posts").doc(docId);
+        DocumentSnapshot documentSnapshot = await documentReference.get();
+        documentReference.delete();
+        Authentication().ShowSuccessMessage(context,"Post deleted Successfully");
+      }
+    }catch(e){
+      Authentication().showOnFailuremessage(context, "Error deleting post: $e");
+    }
+  }
+  Future<void> UpdatePostData()async{
+    try{
+      CollectionReference collectionReference = await firebaseFirestore.collection("posts");
+    }catch(e){
+
     }
   }
 }

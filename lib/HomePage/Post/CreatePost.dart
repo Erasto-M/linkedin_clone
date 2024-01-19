@@ -75,6 +75,7 @@ class _CreatePostState extends State<CreatePost> {
                     await PostDataToFirebase().SendPostToFirebase(
                         postTitle: postTitleController.text,
                         postBody: postBodyController.text,
+                        docID: postTitleController.text,
                         context: context);
                   }
                 }, "Post", BorderSide.none, FontWeight.bold),
