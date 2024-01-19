@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linkedin_clone/Authentication/Screens/ReusableWidgets.dart';
 import 'package:linkedin_clone/HomePage/Post/PostsBackend.dart';
 
 class MyPosts extends StatefulWidget {
@@ -9,8 +10,16 @@ class MyPosts extends StatefulWidget {
 }
 
 class _MyPostsState extends State<MyPosts> {
+  final updateTitleController = TextEditingController();
+  final updateBodyController = TextEditingController();
   String? postTitle;
   String? postBody;
+  @override
+  void initState(){
+    super.initState();
+    updateTitleController.text = "$postTitle";
+    updateBodyController.text = "$postBody";
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +31,7 @@ class _MyPostsState extends State<MyPosts> {
             color: Colors.blue,
           );
         } else if (!snapshot.hasData) {
-          return Text("No data found");
+          return const Text("No data found");
         } else if (snapshot.hasError) {
           return Text("Error found ${snapshot.error}");
         } else {
@@ -84,8 +93,9 @@ class _MyPostsState extends State<MyPosts> {
                         Row(
                           children: [
                             IconButton(
-                                onPressed: () async{
-                                  await PostDataToFirebase().deletePost(context: context, docId: postTitle);
+                                onPressed: () async {
+                                  await PostDataToFirebase().deletePost(
+                                      context: context, docId: postTitle);
                                 },
                                 icon: const Icon(
                                   Icons.delete,
@@ -108,5 +118,59 @@ class _MyPostsState extends State<MyPosts> {
         }
       },
     ));
+  }
+
+  void ShowBottomTextField() {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            child: Column(
+              children: [
+                textFormField(
+                    (updateTitleController.text = postTitle ?? ""  ) as TextEditingController,
+                    TextInputType.text,
+                    const Icon(Icons.note),
+                    null,
+                    2,
+                    1,
+                    50,
+                    false,
+                    "Update The Title of your Post",
+                    "Update Title",
+                    true,
+                    Colors.white12,
+                    OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15))),
+                const Spacer(),
+                textFormField(
+                    (updateBodyController.text = postBody ?? "") as TextEditingController,
+                    TextInputType.text,
+                    const Icon(Icons.note),
+                    null,
+                    50,
+                    1,
+                    2000,
+                    false,
+                    "Edit The Body of your Post",
+                    "Edit Body",
+                    true,
+                    Colors.white12,
+                    OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15))),
+                const Spacer(),
+                ElevatedButton(
+                    onPressed: () {},
+                    child: const Text(
+                      "Update",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    )),
+              ],
+            ),
+          );
+        });
   }
 }

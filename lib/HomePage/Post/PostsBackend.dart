@@ -68,9 +68,14 @@ class PostDataToFirebase {
       Authentication().showOnFailuremessage(context, "Error deleting post: $e");
     }
   }
-  Future<void> UpdatePostData()async{
+  Future<void> UpdatePostData({
+    required String docId,
+    required Map<String,dynamic> updatedData,
+})async{
     try{
       CollectionReference collectionReference = await firebaseFirestore.collection("posts");
+      DocumentReference documentReference = await collectionReference.doc(docId);
+      documentReference.
     }catch(e){
 
     }
