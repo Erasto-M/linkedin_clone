@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:linkedin_clone/Authentication/Backend/AuthBackend.dart';
 import 'package:linkedin_clone/Authentication/Screens/CreateAccount.dart';
 import 'package:linkedin_clone/HomePage/Home_nav.dart';
-import 'package:linkedin_clone/HomePage/SendDatatoFirebase.dart';
+import 'package:linkedin_clone/Authentication/Backend/SendDatatoFirebase.dart';
 
 import 'ReusableWidgets.dart';
 
@@ -41,9 +41,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextInputType.emailAddress,
                 const Icon(Icons.email),
                 null,
+                1,
+                1,
+                20,
                 false,
                 "Enter Email",
                 "Email",
+                false,
+                null,
+                null,
               ),
               showHeight(),
               textFormField(
@@ -51,9 +57,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextInputType.visiblePassword,
                 const Icon(Icons.key),
                 const Icon(Icons.visibility_off),
+                1,
+                1,
+                8,
                 true,
                 "Enter Password",
                 "Password",
+                false,
+                null,
+                null,
               ),
               showHeight(),
               showHeight(),

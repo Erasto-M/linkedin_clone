@@ -16,7 +16,6 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState(){
     super.initState();
     navigateToNextScreen();
-
   }
   Future<void> navigateToNextScreen()async{
     await Future.delayed(Duration(seconds: 3));

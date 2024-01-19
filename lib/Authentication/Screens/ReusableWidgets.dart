@@ -61,19 +61,31 @@ TextFormField textFormField(
     TextInputType textInputType,
      Icon  prefixIcon,
      Icon? suffixIcon,
+     int maxLines,
+     int minLines,
+     int maxLength,
      bool obscureText,
     String hintText,
     String labelText,
+    bool isFilled,
+    Color? fillColor,
+    OutlineInputBorder? outlineInputBorder,
     ){
    return TextFormField(
      keyboardType: textInputType,
      obscureText: obscureText,
      controller: controller,
+     maxLines: maxLines,
+     minLines: minLines,
+     maxLength: maxLength,
      decoration: InputDecoration(
        hintText: hintText,
        hintMaxLines: 1,
+       fillColor: fillColor,
+       filled: isFilled,
        prefixIcon: prefixIcon,
        suffixIcon: suffixIcon,
+       border: outlineInputBorder,
        hintStyle: const TextStyle(
          color: Colors.black87,
          fontSize: 18,
@@ -188,4 +200,12 @@ String? validateConfirmPassword(value, String password){
   } else if (value != password) {
     return "passwords do not match";
   }
+}
+
+void ShowerrorMessage(String message,BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+        message,
+        style: TextStyle(color: Colors.red),
+      )));
 }

@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:linkedin_clone/Authentication/Backend/AuthBackend.dart';
-import 'package:linkedin_clone/HomePage/SendDatatoFirebase.dart';
+import 'package:linkedin_clone/Authentication/Backend/SendDatatoFirebase.dart';
 import '../../HomePage/Home_nav.dart';
 import 'LoginScreen.dart';
 import 'ReusableWidgets.dart';
@@ -53,9 +53,15 @@ class _CreateAccountState extends State<CreateAccount> {
                 TextInputType.text,
                 const Icon(Icons.person),
                 null,
+                1,
+                1,
+                20,
                 false,
                 "Enter FullName",
                 "FullName",
+                false,
+                null,
+                null,
               ),
               showHeight(),
               textFormField(
@@ -63,9 +69,15 @@ class _CreateAccountState extends State<CreateAccount> {
                 TextInputType.emailAddress,
                 const Icon(Icons.email),
                 null,
+                1,
+                1,
+                20,
                 false,
                 "Enter Email",
                 "Email",
+                false,
+                null,
+                null,
               ),
               showHeight(),
               textFormField(
@@ -73,9 +85,15 @@ class _CreateAccountState extends State<CreateAccount> {
                 TextInputType.visiblePassword,
                 const Icon(Icons.key),
                 const Icon(Icons.visibility_off),
+                1,
+                1,
+                8,
                 true,
                 "Enter Password",
                 "Password",
+                false,
+                null,
+                null,
               ),
               showHeight(),
               textFormField(
@@ -83,9 +101,15 @@ class _CreateAccountState extends State<CreateAccount> {
                 TextInputType.visiblePassword,
                 const Icon(Icons.key),
                 const Icon(Icons.visibility_off),
+                1,
+                1,
+                8,
                 true,
                 "please confirm password",
                 "Confirm password",
+                false,
+                null,
+                null,
               ),
               showHeight(),
               const Text("Click to Upload Your Photo"),
@@ -131,7 +155,7 @@ class _CreateAccountState extends State<CreateAccount> {
                     confirmPassword: confirmPasswordController.text,
                   );
                   if (validationError != null) {
-                    ShowerrorMessage(validationError);
+                    ShowerrorMessage(validationError,context);
                   } else {
                     await Authentication().createUser(
                         email: EmailController.text,
@@ -229,15 +253,6 @@ class _CreateAccountState extends State<CreateAccount> {
       ),
     );
   }
-
-  void ShowerrorMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(
-      message,
-      style: TextStyle(color: Colors.red),
-    )));
-  }
-
   String? ValidateFields({
     required String fullName,
     required String email,

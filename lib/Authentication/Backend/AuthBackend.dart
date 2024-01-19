@@ -67,11 +67,11 @@ class Authentication {
         content: Text(
           message,
           style: const TextStyle(
-            color: Colors.white,
+            color: Colors.black87,
             fontSize: 18,
           ),
         ),
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.white,
       ),
     );
   }
@@ -82,7 +82,7 @@ class Authentication {
         message,
         style: const TextStyle(color: Colors.red, fontSize: 18),
       ),
-      backgroundColor: Colors.black87,
+      backgroundColor: Colors.white,
     ));
   }
 
