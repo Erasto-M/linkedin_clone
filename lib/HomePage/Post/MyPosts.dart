@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:linkedin_clone/Authentication/Backend/AuthBackend.dart';
 import 'package:linkedin_clone/Authentication/Screens/ReusableWidgets.dart';
 import 'package:linkedin_clone/HomePage/Post/PostsBackend.dart';
 
@@ -10,16 +11,8 @@ class MyPosts extends StatefulWidget {
 }
 
 class _MyPostsState extends State<MyPosts> {
-  final updateTitleController = TextEditingController();
-  final updateBodyController = TextEditingController();
   String? postTitle;
   String? postBody;
-  @override
-  void initState(){
-    super.initState();
-    updateTitleController.text = "$postTitle";
-    updateBodyController.text = "$postBody";
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,7 +96,9 @@ class _MyPostsState extends State<MyPosts> {
                                 )),
                             const Spacer(),
                             IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  ShowBottomTextField();
+                                },
                                 icon: const Icon(
                                   Icons.edit,
                                   color: Colors.red,
@@ -124,53 +119,102 @@ class _MyPostsState extends State<MyPosts> {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
+          TextEditingController titleController =
+              TextEditingController(text: postTitle ?? "");
+          TextEditingController bodyController =
+              TextEditingController(text: postBody ?? "");
           return Container(
-            child: Column(
-              children: [
-                textFormField(
-                    (updateTitleController.text = postTitle ?? ""  ) as TextEditingController,
-                    TextInputType.text,
-                    const Icon(Icons.note),
-                    null,
-                    2,
-                    1,
-                    50,
-                    false,
-                    "Update The Title of your Post",
-                    "Update Title",
-                    true,
-                    Colors.white12,
-                    OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15))),
-                const Spacer(),
-                textFormField(
-                    (updateBodyController.text = postBody ?? "") as TextEditingController,
-                    TextInputType.text,
-                    const Icon(Icons.note),
-                    null,
-                    50,
-                    1,
-                    2000,
-                    false,
-                    "Edit The Body of your Post",
-                    "Edit Body",
-                    true,
-                    Colors.white12,
-                    OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15))),
-                const Spacer(),
-                ElevatedButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Update",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
-                    )),
-              ],
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: Colors.black12,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  top: 20, bottom: 20, left: 10, right: 10),
+              child: Column(
+                children: [
+                  textFormField(
+                      titleController,
+                      TextInputType.text,
+                      const Icon(Icons.title_outlined),
+                      null,
+                      2,
+                      1,
+                      50,
+                      false,
+                      "Update The Title of your Post",
+                      "Update Title",
+                      true,
+                      Colors.white12,
+                      OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15))),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  textFormField(
+                      bodyController,
+                      TextInputType.text,
+                      const Icon(Icons.note),
+                      null,
+                      50,
+                      1,
+                      2000,
+                      false,
+                      "Edit The Body of your Post",
+                      "Edit Body",
+                      true,
+                      Colors.white12,
+                      OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15))),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(
+                      onPressed: () async {
+                        String? validated = validatePost(
+                            postTitle: titleController.text,
+                            postBody: bodyController.text);
+                        if (validated != null) {
+                          ShowerrorMessage(validated, context);
+                        } else {
+                          await PostDataToFirebase()
+                              .UpdatePostData(docId: postTitle!, updatedData: {
+                            "PostTitle": titleController.text,
+                            "PostBody": bodyController.text,
+                          });
+                          Navigator.of(context).pop();
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blue),
+                      child: const Text(
+                        "Update",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                      )),
+                ],
+              ),
             ),
           );
         });
+  }
+
+  String? validatePost({
+    required String postTitle,
+    required String postBody,
+  }) {
+    if (postTitle == null || postTitle.isEmpty) {
+      return "please Write A Title for your Post";
+    } else if (postTitle.length > 30) {
+      return "Length limited to 2000";
+    }
+    if (postBody == null || postBody.isEmpty) {
+      return "Please write the body of your post";
+    } else if (postBody.length > 2000) {
+      return "Length limited to 2000";
+    }
+    return null;
   }
 }

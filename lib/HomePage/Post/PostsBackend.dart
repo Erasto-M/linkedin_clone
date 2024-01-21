@@ -53,6 +53,23 @@ class PostDataToFirebase {
       return [];
     }
   }
+  Future<void> FetchAllPosts()async{
+    try{
+      CollectionReference collectionReference = await firebaseFirestore.collection("Posts");
+      QuerySnapshot querySnapshot = await collectionReference.get();
+      for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
+        // Access the data of each document using documentSnapshot.data()
+        Map<String, dynamic> postData = documentSnapshot.data() as Map<String, dynamic>;
+
+        // Now, you can use postData to access fields of each document
+        String postTitle = postData["PostTitle"];
+        String postBody = postData["PostBody"];
+
+        // Do something with the retrieved data
+        print("Post Title: $postTitle, Post Body: $postBody");
+      }
+
+  }
   Future<void> deletePost({
     required BuildContext context,required String? docId})async{
     try{
@@ -73,9 +90,9 @@ class PostDataToFirebase {
     required Map<String,dynamic> updatedData,
 })async{
     try{
-      CollectionReference collectionReference = await firebaseFirestore.collection("posts");
+      CollectionReference collectionReference = await firebaseFirestore.collection("Posts");
       DocumentReference documentReference = await collectionReference.doc(docId);
-      documentReference.
+      documentReference.update(updatedData);
     }catch(e){
 
     }

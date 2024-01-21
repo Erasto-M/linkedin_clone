@@ -279,9 +279,6 @@ class _CreateAccountState extends State<CreateAccount> {
     } else if (confirmPassword != password) {
       return "passwords do not match";
     }
-    // if (ImageUrl == null || ImageUrl!.isEmpty) {
-    //   return "please provide an Image";
-    // }
     return null;
   }
 }
