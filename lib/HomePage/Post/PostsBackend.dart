@@ -15,13 +15,23 @@ class PostDataToFirebase {
       User? currentUser = await FirebaseAuth.instance.currentUser;
       if (currentUser != null) {
         String uid = currentUser.uid;
-        CollectionReference collectionReference =
-            firebaseFirestore.collection("Posts");
-        collectionReference.doc(docID).set({
-          "PostTitle": postTitle,
-          "PostBody": postBody,
-          "UID": uid,
-        });
+        /*Fetch the Name and Email of the current user and send them to firebase collection Posts*/
+        DocumentSnapshot usersSnapshot =
+            await firebaseFirestore.collection("Users").doc(uid).get();
+        if (usersSnapshot.exists) {
+          String? userName = usersSnapshot['FullName'];
+          String? userEmail = usersSnapshot['Email'];
+          /*Send the Posts details to firebase including the name and email of the sender*/
+          CollectionReference collectionReference =
+              firebaseFirestore.collection("Posts");
+          collectionReference.doc(docID).set({
+            "PostTitle": postTitle,
+            "PostBody": postBody,
+            "UID": uid,
+            "Email": userEmail,
+            "FullName": userName,
+          });
+        }
         Authentication().ShowSuccessMessage(context, "Post Send successFully");
       }
     } catch (e) {
@@ -54,12 +64,12 @@ class PostDataToFirebase {
     }
   }
 
-  Future<List<Map<String,dynamic>>?> FetchAllPosts() async {
+  Future<List<Map<String, dynamic>>?> FetchAllPosts() async {
     try {
       CollectionReference collectionReference =
           await firebaseFirestore.collection("Posts");
       QuerySnapshot querySnapshot = await collectionReference.get();
-      List<Map<String,dynamic>>?  AllPostlist = [];
+      List<Map<String, dynamic>>? AllPostlist = [];
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
         // Access the data of each document using documentSnapshot.data()
         Map<String, dynamic> postData =
@@ -67,9 +77,13 @@ class PostDataToFirebase {
         // Now, you can use postData to access fields of each document
         String postTitle = postData["PostTitle"];
         String postBody = postData["PostBody"];
+        String userName = postData["FullName"];
+        String userEmail = postData["Email"];
         AllPostlist.add(postData);
         // Do something with the retrieved data
-        print("Post Title: $postTitle, Post Body: $postBody");
+        print(
+          "Post Title: $postTitle, Post Body: $postBody,posterName :$userName,posterEmail :$userEmail",
+        );
       }
       return AllPostlist;
     } catch (e) {}

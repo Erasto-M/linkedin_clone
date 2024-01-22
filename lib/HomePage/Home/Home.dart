@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:linkedin_clone/HomePage/Home/FetchAllPosts.dart';
-import 'package:linkedin_clone/HomePage/Home/profileDetails.dart';
+import 'package:linkedin_clone/HomePage/Home/Profile/profileDetails.dart';
 import '../Post/MyPosts.dart';
 
 class HomeBarContent extends StatefulWidget {

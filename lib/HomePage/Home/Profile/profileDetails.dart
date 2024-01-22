@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../../Authentication/Backend/AuthBackend.dart';
-import '../../Authentication/Backend/SendDatatoFirebase.dart';
+import '../../../Authentication/Backend/AuthBackend.dart';
+import '../../../Authentication/Backend/SendDatatoFirebase.dart';
 
 class ProfileInfo extends StatefulWidget {
   const ProfileInfo({super.key});
@@ -58,7 +58,12 @@ class _ProfileInfoState extends State<ProfileInfo> {
                 ),
               )
             ),
+            const Divider(
+              thickness: 1,
+              color: Colors.black12,
+            ),
             ListTile(
+              leading: const Icon(Icons.edit,size: 25,color: Colors.blue,),
               onTap: () {},
               title: const Text("Edit profile"),
             ),
@@ -67,6 +72,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
               color: Colors.black12,
             ),
             ListTile(
+              leading: const Icon(Icons.logout_outlined,size: 25,color: Colors.blue,),
               onTap: () {
                 showAlertDialog(context);
               },
