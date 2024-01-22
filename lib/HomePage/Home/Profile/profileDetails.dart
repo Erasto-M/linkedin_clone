@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:linkedin_clone/HomePage/Home/Profile/EditProfile.dart';
 
 import '../../../Authentication/Backend/AuthBackend.dart';
 import '../../../Authentication/Backend/SendDatatoFirebase.dart';
@@ -64,7 +65,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
             ),
             ListTile(
               leading: const Icon(Icons.edit,size: 25,color: Colors.blue,),
-              onTap: () {},
+              onTap: (){EditProfile();},
               title: const Text("Edit profile"),
             ),
             const Divider(
