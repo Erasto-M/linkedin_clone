@@ -53,48 +53,56 @@ class PostDataToFirebase {
       return [];
     }
   }
-  Future<void> FetchAllPosts()async{
-    try{
-      CollectionReference collectionReference = await firebaseFirestore.collection("Posts");
+
+  Future<List<Map<String,dynamic>>?> FetchAllPosts() async {
+    try {
+      CollectionReference collectionReference =
+          await firebaseFirestore.collection("Posts");
       QuerySnapshot querySnapshot = await collectionReference.get();
+      List<Map<String,dynamic>>?  AllPostlist = [];
       for (QueryDocumentSnapshot documentSnapshot in querySnapshot.docs) {
         // Access the data of each document using documentSnapshot.data()
-        Map<String, dynamic> postData = documentSnapshot.data() as Map<String, dynamic>;
-
+        Map<String, dynamic> postData =
+            documentSnapshot.data() as Map<String, dynamic>;
         // Now, you can use postData to access fields of each document
         String postTitle = postData["PostTitle"];
         String postBody = postData["PostBody"];
-
+        AllPostlist.add(postData);
         // Do something with the retrieved data
         print("Post Title: $postTitle, Post Body: $postBody");
       }
-
+      return AllPostlist;
+    } catch (e) {}
   }
-  Future<void> deletePost({
-    required BuildContext context,required String? docId})async{
-    try{
+
+  Future<void> deletePost(
+      {required BuildContext context, required String? docId}) async {
+    try {
       User? user = await FirebaseAuth.instance.currentUser;
-      if(user!=null){
+      if (user != null) {
         String uid = user.uid;
-        DocumentReference documentReference= await firebaseFirestore.collection("Posts").doc(docId);
+        DocumentReference documentReference =
+            await firebaseFirestore.collection("Posts").doc(docId);
         DocumentSnapshot documentSnapshot = await documentReference.get();
         documentReference.delete();
-        Authentication().ShowSuccessMessage(context,"Post deleted Successfully");
+        Authentication()
+            .ShowSuccessMessage(context, "Post deleted Successfully");
       }
-    }catch(e){
+    } catch (e) {
       Authentication().showOnFailuremessage(context, "Error deleting post: $e");
     }
   }
+
   Future<void> UpdatePostData({
     required String docId,
-    required Map<String,dynamic> updatedData,
-})async{
-    try{
-      CollectionReference collectionReference = await firebaseFirestore.collection("Posts");
-      DocumentReference documentReference = await collectionReference.doc(docId);
+    required Map<String, dynamic> updatedData,
+  }) async {
+    try {
+      CollectionReference collectionReference =
+          await firebaseFirestore.collection("Posts");
+      DocumentReference documentReference =
+          await collectionReference.doc(docId);
       documentReference.update(updatedData);
-    }catch(e){
-
-    }
+    } catch (e) {}
   }
 }

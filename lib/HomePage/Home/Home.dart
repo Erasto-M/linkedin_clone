@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:linkedin_clone/HomePage/Home/FetchAllPosts.dart';
 
 import '../../Authentication/Backend/AuthBackend.dart';
 import '../../Authentication/Backend/SendDatatoFirebase.dart';
+import '../Post/CreatePost.dart';
+import '../Post/MyPosts.dart';
 
 class HomeBarContent extends StatefulWidget {
   const HomeBarContent({super.key});
@@ -30,23 +33,38 @@ class _HomeBarContentState extends State<HomeBarContent> {
       print("Full Name: $fullName, Email: $email");
     }
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      appBar: AppBar(),
-      drawer:navigationDrawer(),
-      body: const SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 20, left: 15, right: 15),
-          child: Column(
-            children: [
-              Text("hello there"),
-            ],
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+          appBar: AppBar(
+            bottom: const TabBar(
+              labelColor: Colors.blue,
+              unselectedLabelColor: Colors.black,
+              tabs: [
+                Tab(
+                  icon: Icon(Icons.note_add),
+                  text: "All Posts",
+                ),
+                Tab(
+                  icon: Icon(Icons.file_copy),
+                  text: "Recent Posts",
+                )
+              ],
+            ),
           ),
-        ),
-      ),
+          drawer: navigationDrawer(),
+          body: const TabBarView(
+            children: [
+              AllPosts(),
+              MyPosts(),
+            ],
+          )),
     );
   }
+
   void openDrawer() {
     Scaffold.of(context).openDrawer();
   }

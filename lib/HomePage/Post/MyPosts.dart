@@ -36,24 +36,6 @@ class _MyPostsState extends State<MyPosts> {
                 postTitle = userPosts?["PostTitle"] as String? ?? "";
                 postBody = userPosts?["PostBody"] as String? ?? "";
                 print("postTitle: $postTitle postBody:$postBody");
-                // return ListTile(
-                //   title: Center(
-                //     child: Text(
-                //       postTitle,
-                //       style: const TextStyle(
-                //           color: Colors.black,
-                //           fontWeight: FontWeight.bold,
-                //           fontSize: 25),
-                //     ),
-                //   ),
-                //   subtitle: Text(
-                //     postBody,
-                //     style: const TextStyle(
-                //         color: Colors.black87,
-                //         fontWeight: FontWeight.normal,
-                //         fontSize: 20),
-                //   ),
-                // );
                 return Padding(
                   padding: const EdgeInsets.only(
                     top: 15,
