@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 null,
                 1,
                 1,
-                20,
+                50,
                 false,
                 "Enter Email",
                 "Email",

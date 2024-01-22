@@ -15,7 +15,7 @@ void main() async{
     debugShowCheckedModeBanner: false,
     home:const Home(),
     theme: ThemeData(
-      primaryColor:const  Color.fromRGBO(225, 220, 220, 10),
+      primaryColor: Colors.blue,
     ),
   ));
 }
