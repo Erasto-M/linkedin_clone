@@ -4,6 +4,7 @@ import 'package:linkedin_clone/HomePage/Home/Profile/EditProfile.dart';
 
 import '../../../Authentication/Backend/AuthBackend.dart';
 import '../../../Authentication/Backend/SendDatatoFirebase.dart';
+import '../../../Authentication/Screens/ReusableWidgets.dart';
 
 class ProfileInfo extends StatefulWidget {
   const ProfileInfo({super.key});
@@ -13,6 +14,16 @@ class ProfileInfo extends StatefulWidget {
 }
 
 class _ProfileInfoState extends State<ProfileInfo> {
+  final fullNameController = TextEditingController();
+  final emailController = TextEditingController();
+  final SkillsController = TextEditingController();
+  final profilePicController = TextEditingController();
+  final aboutMeController = TextEditingController();
+  final experiencesController = TextEditingController();
+  final projectsController = TextEditingController();
+  final technologiesController = TextEditingController();
+  final educationController = TextEditingController();
+  final licencesController = TextEditingController();
   String? fullName;
   String? email;
 
@@ -65,7 +76,7 @@ class _ProfileInfoState extends State<ProfileInfo> {
             ),
             ListTile(
               leading: const Icon(Icons.edit,size: 25,color: Colors.blue,),
-              onTap: (){EditProfile();},
+              onTap: (){ShowAlertDialogForUpdate();},
               title: const Text("Edit profile"),
             ),
             const Divider(
@@ -119,5 +130,125 @@ class _ProfileInfoState extends State<ProfileInfo> {
         );
       },
     );
+  }
+  AlertDialog? ShowAlertDialogForUpdate(){
+    showDialog(context: context, builder: (BuildContext context){
+      return AlertDialog(
+        title: Text("Edit Your Profile"),
+        content: Padding(
+          padding: EdgeInsets.all(10.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                textFormField(
+                    fullNameController,
+                    TextInputType.text,
+                    const Icon(Icons.person),
+                    null,
+                    4,
+                    1,
+                    50,
+                    false,
+                    "your FullName",
+                    "FullName",
+                    true,
+                    Colors.white24,
+                    OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    )),
+                showHeight(),
+                textFormField(
+                    emailController,
+                    TextInputType.emailAddress,
+                    const Icon(Icons.email_outlined),
+                    null,
+                    4,
+                    1,
+                    50,
+                    false,
+                    "Enter Email",
+                    "Email",
+                    true,
+                    Colors.white24,
+                    OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    )),
+                showHeight(),
+                textFormField(
+                    aboutMeController,
+                    TextInputType.text,
+                    const Icon(Icons.email_outlined),
+                    null,
+                    50,
+                    1,
+                    1000,
+                    false,
+                    "Tell us about Yourself",
+                    "About",
+                    true,
+                    Colors.white24,
+                    OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    )),
+                showHeight(),
+                textFormField(
+                    experiencesController,
+                    TextInputType.text,
+                    const Icon(Icons.note),
+                    null,
+                    50,
+                    1,
+                    1000,
+                    false,
+                    "Which are your Experiences",
+                    "Experiences",
+                    true,
+                    Colors.white24,
+                    OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    )),
+                showHeight(),
+                textFormField(
+                    emailController,
+                    TextInputType.text,
+                    const Icon(Icons.note),
+                    null,
+                    4,
+                    1,
+                    50,
+                    false,
+                    "Enter Your Skills",
+                    "Skills",
+                    true,
+                    Colors.white24,
+                    OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    )),
+                showHeight(),
+                textFormField(
+                    technologiesController,
+                    TextInputType.text,
+                    const Icon(Icons.military_tech),
+                    null,
+                    4,
+                    1,
+                    50,
+                    false,
+                    "Enter the technologies you use",
+                    "Technologies",
+                    true,
+                    Colors.white24,
+                    OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    )),
+                showHeight(),
+                ShowButton(Colors.blue, () { }, "Update Your Profile", BorderSide.none, FontWeight.bold),
+                const SizedBox(height: 40,),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
   }
 }
